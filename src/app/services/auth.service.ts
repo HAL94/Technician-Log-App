@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Router } from '@angular/router';
-import { Subject, Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 import { SignupRequest } from '../models/http-models/http-request-models/signup-request.model';
 import { LoginResponse } from '../models/http-models/http-response-models/login-response.model';
@@ -18,7 +18,7 @@ import { environment } from '../../environments/environment';
 
 export class AuthService {
   private token: string;
-  private authentication = new Subject<boolean>();
+  private authentication = new BehaviorSubject<boolean>(false);
   private isAuthenticated = false;
   private tokenTimer: any;
   private userId: any;

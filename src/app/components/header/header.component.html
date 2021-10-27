@@ -7,23 +7,23 @@
     </a>
   </span>
   <span><a mat-button routerLinkActive="mat-accent"
-    *ngIf="isAuthenticated" routerLink="today-entries">Today</a></span>
-  <span><a mat-button routerLinkActive="mat-accent" *ngIf="isAuthenticated"
+    *ngIf="(auth$ | async)" routerLink="today-entries">Today</a></span>
+  <span><a mat-button routerLinkActive="mat-accent" *ngIf="(auth$ | async)"
     routerLink="techentries">Entries</a></span>
   <span class="spacer"></span>
-  <ul>
-    <li *ngIf="!isAuthenticated">
+  <ul> 
+    <li *ngIf="!(auth$ | async)">
       <a mat-button routerLinkActive="mat-accent" routerLink="login">Login</a>
     </li>
-    <li *ngIf="!isAuthenticated">
+    <li *ngIf="!(auth$ | async)">
       <a mat-button routerLinkActive="mat-accent" routerLink="signup">Signup</a>
     </li>
-    <li *ngIf="isAuthenticated">
+    <li *ngIf="(auth$ | async)">
       <a mat-button routerLinkActive="mat-accent" routerLink="add-entry"> Add Entry <mat-icon>note_add</mat-icon></a>
     </li>
-    <li *ngIf="isAuthenticated">
+    <li *ngIf="(auth$ | async) && (user$ | async)">
       <a mat-button [matMenuTriggerFor]="menu">
-        <div class="default-header-image" [ngStyle]="{ 'background-image': profileImagePath ? 'url(' + profileImagePath + ')'
+        <div class="default-header-image" [ngStyle]="{ 'background-image': (user$ | async).profileImage ? 'url(' + (user$ | async).profileImage + ')'
         : 'url('+ defualtImagePath +')'}"></div>
         <mat-icon class="drop-down">arrow_drop_down</mat-icon>
       </a>

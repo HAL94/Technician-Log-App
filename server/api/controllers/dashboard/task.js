@@ -142,8 +142,6 @@ exports.edit_task = async (req, res, next) => {
 
     }
 
-
-
     newTask.subtasks = updatedSubtaskList.map(st => st._id);
 
     await Task.updateOne({_id: taskId}, {$set: newTask})

@@ -4,13 +4,11 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material';
 
 import { take } from 'rxjs/operators';
-
-import { HttpClient } from '@angular/common/http';
-
 import { mimeType } from '../mime-type.validator';
 import { ImageUploadModalComponent } from './image-file-modal/image-upload-modal.component';
 import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
+import { MatSnackService } from 'src/app/services/mat-snack.service';
 
 
 @Component({
@@ -29,25 +27,20 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
   userSubscription: Subscription;
   paramSubscription: Subscription;
 
-  constructor(private fb: FormBuilder, private dialog: MatDialog,
-  private http: HttpClient, private userService: UserService) { }
+  constructor(
+    private fb: FormBuilder, 
+    private dialog: MatDialog,
+    private userService: UserService,
+    private snackBarService: MatSnackService) { }
 
   ngOnInit() {
     this.imgUploadForm = this.fb.group({
       profileImage: new FormControl(null, [Validators.required], mimeType)
     });
 
-    const userLoc = this.userService.getUser();
-    if (userLoc) {
-      if (userLoc.profileImage !== null) {
-        this.profileImagePath = userLoc.profileImage;
-      }
-    }
-
     this.userSubscription = this.userService.getUserUpdate().subscribe(user => {
-      if (user.profileImage !== null) {
-        this.profileImagePath = user.profileImage;
-      }
+      console.log(user);
+      this.profileImagePath = user.profileImage;
     });
   }
 
@@ -61,18 +54,12 @@ export class ImageUploadComponent implements OnInit, OnDestroy {
       take (1)
     ).subscribe(status => {
       if (status === 'INVALID') {
-
-        this.openDialog(false);
-
+        this.snackBarService.openSnackBar('The file you selected is invalid', 1500, this.snackBarService.snackbarFailConfig);
       } else if (status === 'VALID') {
-
         this.dialogRef = this.openDialog(true);
-
         const imageUpload = new FormData();
         imageUpload.append('profileImage', file);
-
         this.userService.updateUserProfileImageAPI(imageUpload, this.dialogRef);
-
       }
     });
   }

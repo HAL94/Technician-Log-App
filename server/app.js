@@ -12,7 +12,7 @@ const usersRoutes = require('./api/routes/users');
 const techentryRoutes = require('./api/routes/tech-entries');
 const dashboardRoutes = require('./api/routes/dashboard/dashboard');
 
-mongoose.connect(process.env.mongodburl,
+mongoose.connect(process.env.DB_HOST,
  {useNewUrlParser: true}).then(
      () => {console.log('connected to mongodb atlas');},
      (error) => {console.log('connection to db failed', error)}
@@ -24,7 +24,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

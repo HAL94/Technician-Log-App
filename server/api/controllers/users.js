@@ -6,6 +6,11 @@ const User = require('../models/user');
 const DashboardController = require('../controllers/dashboard/dashboard');
 const fs = require('fs');
 
+const upload = require('../middleware/file-upload');
+const multer = require('multer');
+const { MulterError } = require('multer');
+
+
 
 exports.signup = async (req, res, next) => {
   try {
@@ -70,7 +75,7 @@ exports.login = async (req, res, next) => {
       const token = jwt.sign({
         email: user.email,
         _id: user._id
-      }, process.env.JWTKEY, {
+      }, process.env.JWT_SECRET, {
         expiresIn: '1h'
       });
 
@@ -104,35 +109,41 @@ exports.get_profile = async (req, res, next) => {
       throw error;
     }
     let imageName = '';
-    // console.log(user.profileImage);
+
     if (user.profileImage) {
       const arr = user.profileImage.split('/');
       imageName = arr[arr.length - 1];
     }
 
-    const filepath = "images/" + imageName;
+    const filepath = "server/images/" + imageName;
+    
+    // console.log(filepath);
+
     fs.access(filepath, fs.F_OK, (err) => {
 
       if (err) {
+        console.log(err);
         user.profileImage = null;
       }
 
+      let userFound = {
+        id: user._id,
+        email: user.email,
+        fname: user.fname,
+        lname: user.lname,
+        badgeNumber: user.badgeNumber,
+        birthDate: user.birthDate,
+        address: user.address,
+        city: user.city,
+        country: user.country,
+        postalCode: user.postalCode,
+        aboutUser: user.aboutUser,
+        profileImage: user.profileImage,
+        createdAt: user.createdAt
+      };
+
       res.status(200).json({
-        fetchedUser: {
-          id: user._id,
-          email: user.email,
-          fname: user.fname,
-          lname: user.lname,
-          badgeNumber: user.badgeNumber,
-          birthDate: user.birthDate,
-          address: user.address,
-          city: user.city,
-          country: user.country,
-          postalCode: user.postalCode,
-          aboutUser: user.aboutUser,
-          profileImage: user.profileImage,
-          createdAt: user.createdAt
-        }
+        fetchedUser: userFound
       });
     });
 
@@ -199,32 +210,46 @@ exports.update_profile = async (req, res, next) => {
 };
 
 exports.upload_profileImg = async (req, res, next) => {
-  try {
-    const userId = req.params.userId;
-    const file = req.file;
-    const url = req.protocol + '://' + req.get('host');
-    const imagePath = url + '/images/' + file.filename;
-    console.log(imagePath);
-    const result = await User.updateOne({_id: userId}, {$set: {profileImage: imagePath}})
-      .exec();
+  upload(req, res, async (error) => {    
+    try {
+        if (error instanceof multer.MulterError) {
+          // A Multer error occurred when uploading.
+          // return res.status(500).json({status: error.status,
+          //   message: error.message})
+          console.log('MulterError', error.message);
+          throw new Error(error.message);
+        } else if (error) {
+          // An unknown error occurred when uploading.
+          console.log('NotAMulterError', error.message);
+          throw new Error(error.message);
+        }
+    
+        const userId = req.params.userId;
+        const file = req.file;
+        console.log(file);  
+        const url = req.protocol + '://' + req.get('host');
+        const imagePath = url + '/images/' + file.filename;
+        console.log(imagePath);
+        const result = await User.updateOne({_id: userId}, {$set: {profileImage: imagePath}})
+          .exec(); 
 
-    if (!result || typeof result === 'undefined') {
-      const error = new Error()
-      error.message = 'could not update';
-      error.status = 500;
-    }
+        if (!result || typeof result === 'undefined') {
+          const error = new Error()
+          error.message = 'could not update';
+          error.status = 500;
+        }
 
-    console.log(result);
+        console.log(result);
 
-    return res.status(200).json({
-      message: 'success',
-      profileImage: imagePath
-    });
-
-  } catch (error) {
-    console.log(error);
-    res.status(error.status).json({status: error.status,
-      message: error.message});
-  }
-
+        return res.status(200).json({
+          message: 'success',
+          profileImage: imagePath
+        });
+      }
+      catch (error) {    
+        console.log(error);
+        return res.status(500).json({status: error.status,
+          message: error.message});
+      }
+    }) 
 };

@@ -7,8 +7,8 @@ import { AuthGuard } from 'src/app/guards/auth/auth.guard';
 
 const routes: Routes = [
   {path: '', component: UserProfileComponent, canActivate: [AuthGuard], children: [
-    {path: '', redirectTo: 'edit-profile', pathMatch: 'full', canActivate: [AuthGuard]},
-    {path: 'edit-profile', component: EditProfileComponent, canActivate: [AuthGuard]}
+    {path: '', redirectTo: 'edit-profile', pathMatch: 'full'},
+    {path: 'edit-profile', component: EditProfileComponent}
   ]},
 ];
 

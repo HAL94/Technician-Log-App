@@ -11,13 +11,14 @@ const storage = multer.diskStorage({
     if (isValid) {
       error = null
     }
-    cb(error, "images");
+    cb(error, "server/images");
   },
   filename: (req, file, cb) => {
-    const name = file.originalname.toLowerCase().split(' ').join('-');
+    const name = file.originalname.toLowerCase().split('.')[0];
     const ext = MIME_TYPE_MAP[file.mimetype];
+    console.log(name);
     cb(null, name + '-' + Date.now() + '.' + ext);
   }
 });
 
-module.exports = multer({storage: storage}).single("profileImage");
+module.exports = multer({storage: storage, limits: { fileSize: 2000000 }}).single("profileImage");

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 
@@ -16,19 +16,20 @@ import { ImageUploadModalComponent } from '../components/user-profile/image-uplo
 
 export class UserService {
   private user: User;
-  private userUpdated = new Subject<User>();
+  private userUpdated = new BehaviorSubject<User>(null);
   private HTTP_URLS = environment.USER_URLS;
 
   constructor(private http: HttpClient, private snackBarService: MatSnackService) { }
 
   async setUser(userId: string) {
     try {
+      console.log('userid', userId);
       const url = this.HTTP_URLS.setUser + userId;
 
       const response = await this.http.get<{fetchedUser: User}>(url).toPromise();
 
       this.user = response.fetchedUser;
-
+      // console.log(this.user);
       this.updateUser();
     } catch (error) {
       console.log(error);
@@ -70,6 +71,7 @@ export class UserService {
       dialogRef.close();
     } catch (error) {
       console.log(error);
+      dialogRef.close();
     }
   }
 

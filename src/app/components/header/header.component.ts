@@ -1,58 +1,30 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
-
-  profileImagePath;
+export class HeaderComponent implements OnInit {
+  user$: Observable<User>;
+  auth$: Observable<boolean>;
+  
   defualtImagePath = './assets/def_user_img.jpg';
 
-  isAuthenticated = false;
-
-  userSubscription: Subscription;
-  authSubscription: Subscription;
 
   constructor(private authService: AuthService, public userService: UserService) { }
 
   ngOnInit() {
-    this.isAuthenticated = this.authService.getIsAuth();
-
-    this.authSubscription = this.authService.getAuthenticationObs()
-      .subscribe(auth => {
-        this.isAuthenticated = auth;
-      });
-
-    const user = this.userService.getUser();
-    if (user) {
-      if (user.profileImage !== null) {
-        this.profileImagePath = user.profileImage;
-      }
-    }
-
-    this.userSubscription = this.userService.getUserUpdate().subscribe(userObs => {
-      if (userObs.profileImage) {
-        this.profileImagePath = userObs.profileImage;
-      }
-    });
+    this.auth$ = this.authService.getAuthenticationObs();    
+    this.user$ = this.userService.getUserUpdate();
   }
 
   onLogout() {
     this.authService.logout();
-    this.profileImagePath = null;
   }
 
-  ngOnDestroy() {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
-    if (this.authSubscription) {
-      this.authSubscription.unsubscribe();
-    }
-  }
 }

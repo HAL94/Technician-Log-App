@@ -7,7 +7,7 @@ module.exports = (req, res, next) => {
       throw new Error('Authorization Header Not Set');
     }
     const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWTKEY);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // console.log('user data', decoded);
     req.userData = decoded;
     // console.log(req);
