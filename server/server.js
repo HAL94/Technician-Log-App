@@ -1,6 +1,6 @@
 require('dotenv').config();
 const http = require('http');
-console.log(process.env.DB_HOST);
+// console.log(process.env.DB_HOST);
 const app = require('./app');
 
 
