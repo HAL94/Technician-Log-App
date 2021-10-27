@@ -41,16 +41,8 @@ export class AuthService {
     return this.userId;
   }
 
-  async signup(authData: SignupRequest) {
-    try {
-      const result = await this.http.post<SignUpResponse>(this.HTTP_URLS.signup, authData).toPromise();
-
-      this.snackBarService.openSnackBar(result.message, 1000, this.snackBarService.snackbarSuccessConfig);
-
-      this.router.navigate(['login']);
-    } catch (error) {
-      console.log(error);
-    }
+  signup(authData: SignupRequest) {
+    return this.http.post<SignUpResponse>(this.HTTP_URLS.signup, authData);
   }
 
   async login(authData: LoginRequest) {

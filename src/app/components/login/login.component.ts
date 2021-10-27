@@ -21,15 +21,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onLogin(form: NgForm) {
-    if (form.value) {
+    if (form.valid) {
       this.isLoading = true;
+      console.log(this.isLoading);
       const authData: LoginRequest = {
         email: form.value.email,
         password: form.value.password
       };
       this.authService.login(authData);
       this.subscription = this.authService.getAuthenticationObs().subscribe(authentication => {
-        this.isLoading = authentication;
+        if (authentication) {
+          this.isLoading = false;
+        }
       });
     }
   }

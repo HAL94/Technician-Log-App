@@ -1,7 +1,7 @@
 <div class="mat-elevation-z8 col-xs-12 col-sm-10 mg-auto-25 pad-0">
   <mat-form-field floatLabel="never" class="filter-search">
-    <input matInput [(ngModel)]="filter" placeholder="Filter Entries" autocomplete="off" (keyup)="filterTable(filter)">
-    <button matSuffix mat-button mat-icon-button aria-label="Clear" *ngIf="filter" (click)="onSearchClear()">
+    <input #filterInput matInput placeholder="Filter Entries" autocomplete="off" (keyup)="filterTable($event)">
+    <button matSuffix mat-button mat-icon-button aria-label="Clear" *ngIf="filterInput.value" (click)="onSearchClear(filterInput)">
         <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>

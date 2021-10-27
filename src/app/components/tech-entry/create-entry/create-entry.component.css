@@ -13,4 +13,9 @@
   margin: 10px auto;
 }
 
+mat-spinner {
+  display: block;
+  margin: auto;
+}
+
 

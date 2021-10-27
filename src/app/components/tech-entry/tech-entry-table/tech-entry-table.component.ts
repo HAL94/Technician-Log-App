@@ -58,13 +58,14 @@ export class TechEntryTableComponent implements OnInit, OnDestroy {
   }
 
 
-  onSearchClear() {
-    this.filter = '';
-    this.filterTable('');
+  onSearchClear(inputElement: HTMLInputElement) {
+    inputElement.value = '';    
+    this.techEntryTable.filter = inputElement.value;
   }
 
-  filterTable(filter: string) {
-    this.techEntryTable.filter = filter.trim().toLowerCase();
+  filterTable(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.techEntryTable.filter = filterValue.trim().toLowerCase();
   }
 
   onEditNavigate(techentry: TechEntry) {

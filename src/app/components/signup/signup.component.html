@@ -1,7 +1,7 @@
 <div class="col-xs-12 col-md-5 mg-auto-25">
   <mat-card>
     <mat-spinner *ngIf="isLoading"></mat-spinner>
-    <form *ngIf="!isLoading" #signupForm="ngForm">
+    <form *ngIf="!isLoading" #signupForm="ngForm" (ngSubmit)="onSignup(signupForm)" >
         <mat-form-field>
             <input matInput ngModel placeholder="Enter your email" name="email" type="email" #emailInput="ngModel" required email>
             <mat-error *ngIf="emailInput.invalid || !emailInput.value">{{"Enter a valid email address"}}</mat-error>
@@ -26,13 +26,11 @@
           <input matInput ngModel name="birthdate"
           [matDatepicker]="picker"
           placeholder="Enter your Birth Date"
-          #birthDateInput="ngModel"
-          [min]="minDate"
-          [max]="maxDate">
+          #birthDateInput="ngModel">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <button mat-raised-button color="primary" (click)="onSignup(signupForm, $event)" *ngIf="!isLoading" [disabled]="signupForm.invalid">Sign Up</button>
+        <button type="submit" mat-raised-button color="primary" [disabled]="signupForm.invalid">Sign Up</button>
     </form>
   </mat-card>
 </div>

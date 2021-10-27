@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { SignupRequest } from 'src/app/models/http-models/http-request-models/signup-request.model';
+import { Subscription } from 'rxjs';
+import { MatSnackService } from 'src/app/services/mat-snack.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -9,20 +12,22 @@ import { SignupRequest } from 'src/app/models/http-models/http-request-models/si
   styleUrls: ['./signup.component.css']
 })
 
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
-  maxDate = new Date(2000, 12, 31);
-  minDate = new Date(1980, 0, 0);
+  subscription: Subscription;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+    private snackBarService: MatSnackService,
+    private router: Router) { }
 
   ngOnInit() {
   }
 
-  onSignup(form: NgForm, event: Event) {
-    // event.preventDefault()
+  onSignup(form: NgForm) {
+    if (form.valid) {
+      
+      this.isLoading = true;
 
-    if (form.value) {
       const authData: SignupRequest = {
         email: form.value.email,
         password: form.value.password,
@@ -35,10 +40,19 @@ export class SignupComponent implements OnInit {
         authData.birthDate = new Date(form.value.birthdate);
       }
 
-      console.log(authData);
-      this.authService.signup(authData);
+      // console.log(authData);
+      this.subscription = this.authService.signup(authData).subscribe((result) => {
 
-      // return false;
+        this.snackBarService.openSnackBar(result.message, 1000, this.snackBarService.snackbarSuccessConfig);
+
+        this.router.navigate(['login']);
+      });
+
+
     }
   }
-}
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+} 
