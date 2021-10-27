@@ -1,30 +1,30 @@
 export const environment = {
   production: true,
   AUTH_URLS: {
-    signup: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/user/signup',
-    login: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/user/login'
+    signup: 'user/signup',
+    login: 'user/login'
   },
   DASHBOARD_URLS: {
-    getDashboard: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/dashboard'
+    getDashboard: 'dashboard'
   },
   TASKLIST_URLS: {
-    getTaskList: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/dashboard/task/',
-    addTask: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/dashboard/task/add',
-    editTask: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/dashboard/task/edit/',
-    deleteTask: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/dashboard/task/delete/',
-    editSubtask: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/dashboard/subtask/edit/',
-    deleteSubtask: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/dashboard/subtask/delete/'
+    getTaskList: 'dashboard/task/',
+    addTask: 'dashboard/task/add',
+    editTask: 'dashboard/task/edit/',
+    deleteTask: 'dashboard/task/delete/',
+    editSubtask: 'dashboard/subtask/edit/',
+    deleteSubtask: 'dashboard/subtask/delete/'
   },
   TECHENTRY_URLS: {
-    getTechentries: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/techentry',
-    createTechentry: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/techentry',
-    getTechentry: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/techentry/',
-    updateTechentry: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/techentry/',
-    deleteTechentry: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/techentry/'
+    getTechentries: 'techentry',
+    createTechentry: 'techentry',
+    getTechentry: 'techentry/',
+    updateTechentry: 'techentry/',
+    deleteTechentry: 'techentry/'
   },
   USER_URLS: {
-    setUser: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/user/user-profile/',
-    updateUser: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/user/user-profile/',
-    updateUserProfile: 'http://meantechlogger-env-1.ads5ygkmjm.us-east-2.elasticbeanstalk.com/user/user-profile/upload/'
+    setUser: 'user/user-profile/',
+    updateUser: 'user/user-profile/',
+    updateUserProfile: 'user/user-profile/upload/'
   }
 };
