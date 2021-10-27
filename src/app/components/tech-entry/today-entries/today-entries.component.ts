@@ -8,8 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class TodayEntriesComponent implements OnInit {
   techEntryTableRequest = 'TodaysEntries';
 
-  constructor(
-    ) { }
+  constructor() { }
 
   ngOnInit() {
   }
